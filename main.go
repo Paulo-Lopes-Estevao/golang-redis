@@ -48,6 +48,7 @@ func httpHome(c echo.Context) error {
 }
 
 func httpAllUsers(c echo.Context) error {
+	var users []User
 
 	data := map[string]interface{}{}
 
