@@ -43,8 +43,6 @@ func main() {
 
 }
 
-var users = User{}
-
 func httpHome(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Welcome")
 }
