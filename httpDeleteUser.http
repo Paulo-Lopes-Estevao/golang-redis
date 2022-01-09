@@ -1,0 +1,2 @@
+DELETE localhost:2000/users/4
+Content-Type: application/json
