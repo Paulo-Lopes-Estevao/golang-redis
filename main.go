@@ -69,11 +69,13 @@ func httpFindByIdUser(c echo.Context) error {
 
 	data := map[string]interface{}{}
 
-	userRedis := getkeyCache("users")
-
 	iduser := c.Param("id")
 
 	result, _ := Clientredis().Exists(context.Background(), "users_"+iduser).Result()
+
+	IDKEY := fmt.Sprintf("users_%s", iduser)
+
+	userRedis := getkeyCache(IDKEY)
 
 	if result != 0 {
 		users.UnmarshalBinary(userRedis)
@@ -107,7 +109,9 @@ func httpCreateUsers(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	errRedis := setValueCache("users_"+string(users.ID), &users)
+	IDKEY := fmt.Sprintf("users_%d", users.ID)
+
+	errRedis := setValueCache(IDKEY, &users)
 	if errRedis != nil {
 		fmt.Println(errRedis)
 	}
@@ -125,7 +129,10 @@ func httpDeleteUser(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	Clientredis().Del(context.Background(), "users_"+iduser)
+
+	IDKEY := fmt.Sprintf("users_%s", iduser)
+
+	Clientredis().Del(context.Background(), IDKEY)
 
 	return c.JSON(http.StatusOK, "deleted")
 }
