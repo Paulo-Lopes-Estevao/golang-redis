@@ -33,7 +33,7 @@ func main() {
 
 	e.GET("/", httpHome)
 	e.GET("/users", httpAllUsers)
-	e.PATCH("/users/id", httpFindByIdUser)
+	e.PATCH("/users/:id", httpFindByIdUser)
 	e.POST("/users", httpCreateUsers)
 	e.DELETE("/users/:id", httpDeleteUser)
 
