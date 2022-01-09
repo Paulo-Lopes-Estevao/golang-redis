@@ -64,6 +64,35 @@ func httpAllUsers(c echo.Context) error {
 	return c.JSON(http.StatusOK, data)
 }
 
+func httpFindByIdUser(c echo.Context) error {
+	var users User
+
+	data := map[string]interface{}{}
+
+	userRedis := getkeyCache("users")
+
+	iduser := c.Param("id")
+
+	result, _ := Clientredis().Exists(context.Background(), "users_"+iduser).Result()
+
+	if result != 0 {
+		users.UnmarshalBinary(userRedis)
+		data["redis"] = users
+		return c.JSON(http.StatusOK, data)
+	}
+
+	repository := dbConected()
+	err := repository.Find(&users, iduser).Error
+
+	if err != nil {
+		data["error"] = "not found users"
+		return c.JSON(http.StatusNotFound, data)
+	}
+
+	data["databse"] = &users
+	return c.JSON(http.StatusOK, data)
+}
+
 func httpCreateUsers(c echo.Context) error {
 
 	if err := c.Bind(&users); err != nil {
