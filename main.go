@@ -60,7 +60,7 @@ func httpAllUsers(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, data)
 	}
 
-	data["databse"] = &users
+	data["databse"] = users
 	return c.JSON(http.StatusOK, data)
 }
 
