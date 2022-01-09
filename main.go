@@ -94,6 +94,7 @@ func httpFindByIdUser(c echo.Context) error {
 }
 
 func httpCreateUsers(c echo.Context) error {
+	var users User
 
 	if err := c.Bind(&users); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
@@ -115,6 +116,7 @@ func httpCreateUsers(c echo.Context) error {
 }
 
 func httpDeleteUser(c echo.Context) error {
+	var users User
 
 	iduser := c.Param("id")
 
