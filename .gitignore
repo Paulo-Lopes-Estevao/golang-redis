@@ -1,2 +1,5 @@
 .idea
 *.db
+ombre.db
+go.mod
+go.sum
