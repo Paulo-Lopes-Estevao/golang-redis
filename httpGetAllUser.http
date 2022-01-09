@@ -1,0 +1,2 @@
+GET localhost:2000/users
+Content-Type: application/json
