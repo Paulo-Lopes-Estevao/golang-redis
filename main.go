@@ -107,7 +107,7 @@ func httpCreateUsers(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
-	errRedis := setValueCache("users", &users)
+	errRedis := setValueCache("users_"+string(users.ID), &users)
 	if errRedis != nil {
 		fmt.Println(errRedis)
 	}
@@ -125,7 +125,7 @@ func httpDeleteUser(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
-	Clientredis().Del(context.Background(), "users")
+	Clientredis().Del(context.Background(), "users_"+iduser)
 
 	return c.JSON(http.StatusOK, "deleted")
 }
