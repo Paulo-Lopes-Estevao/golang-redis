@@ -52,16 +52,6 @@ func httpAllUsers(c echo.Context) error {
 
 	data := map[string]interface{}{}
 
-	userRedis := getkeyCache("users")
-
-	result, _ := Clientredis().Exists(context.Background(), "users").Result()
-
-	if result != 0 {
-		users.UnmarshalBinary(userRedis)
-		data["redis"] = users
-		return c.JSON(http.StatusOK, data)
-	}
-
 	repository := dbConected()
 	err := repository.Find(&users).Error
 
