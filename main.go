@@ -19,6 +19,10 @@ type User struct {
 	gorm.Model
 }
 
+func (user *User) TableName() string {
+	return "user"
+}
+
 func init() {
 	dbConected()
 }
