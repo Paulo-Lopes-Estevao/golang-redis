@@ -63,8 +63,20 @@ func httpHome(c echo.Context) error {
 
 func httpAllUsers(c echo.Context) error {
 	var users []User
+	var user User
 
 	data := map[string]interface{}{}
+
+	keys, _ := Clientredis().Keys(context.Background(), "*").Result()
+
+	if len(keys) > 0 {
+		for s := 0; s < len(keys); s++ {
+			userRedis := getkeyCache(keys[s])
+			user.UnmarshalBinary(userRedis)
+			data[keys[s]] = user
+		}
+		return c.JSON(http.StatusOK, data)
+	}
 
 	repository := dbConected()
 	err := repository.Find(&users).Error
@@ -73,8 +85,7 @@ func httpAllUsers(c echo.Context) error {
 		data["error"] = "not found users"
 		return c.JSON(http.StatusNotFound, data)
 	}
-
-	data["databse"] = users
+	data["databse"] = &users
 	return c.JSON(http.StatusOK, data)
 }
 
