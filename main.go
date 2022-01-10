@@ -19,6 +19,12 @@ type User struct {
 	gorm.Model
 }
 
+type DtoInput struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+}
+
 func (user *User) TableName() string {
 	return "user"
 }
@@ -122,17 +128,17 @@ func httpCreateUsers(c echo.Context) error {
 
 func httpUpdateUser(c echo.Context) error {
 	var users User
+	var input DtoInput
 
 	iduser := c.Param("id")
 
-	if err := c.Bind(&users); err != nil {
+	if err := c.Bind(&input); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	body := users
 
 	repository := dbConected()
 
-	err := repository.Find(&users, iduser).Error
+	err := repository.First(&users, iduser).Error
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
@@ -142,9 +148,9 @@ func httpUpdateUser(c echo.Context) error {
 
 	Clientredis().Del(context.Background(), IDKEY)
 
-	repository.Model(&users).Updates(&body)
+	repository.Model(&users).Update(&input)
 
-	errRedis := setValueCache(IDKEY, &body)
+	errRedis := setValueCache(IDKEY, &users)
 	if errRedis != nil {
 		fmt.Println(errRedis)
 	}
