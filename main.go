@@ -120,6 +120,38 @@ func httpCreateUsers(c echo.Context) error {
 	return c.JSON(http.StatusCreated, users)
 }
 
+func httpUpdateUser(c echo.Context) error {
+	var users User
+
+	iduser := c.Param("id")
+
+	if err := c.Bind(&users); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	body := users
+
+	repository := dbConected()
+
+	err := repository.Find(&users, iduser).Error
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	IDKEY := fmt.Sprintf("users_%d", users.ID)
+
+	Clientredis().Del(context.Background(), IDKEY)
+
+	repository.Model(&users).Updates(&body)
+
+	errRedis := setValueCache(IDKEY, &body)
+	if errRedis != nil {
+		fmt.Println(errRedis)
+	}
+
+	return c.JSON(http.StatusOK, &users)
+}
+
 func httpDeleteUser(c echo.Context) error {
 	var users User
 
