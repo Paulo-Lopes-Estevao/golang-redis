@@ -35,6 +35,7 @@ func main() {
 	e.GET("/users", httpAllUsers)
 	e.PATCH("/users/:id", httpFindByIdUser)
 	e.POST("/users", httpCreateUsers)
+	e.PUT("/users/:id", httpUpdateUser)
 	e.DELETE("/users/:id", httpDeleteUser)
 
 	if err := e.Start(":2000"); err != nil {
