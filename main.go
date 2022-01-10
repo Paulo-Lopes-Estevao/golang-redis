@@ -25,6 +25,13 @@ type DtoInput struct {
 	Phone string `json:"phone"`
 }
 
+type DtoOutput struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+}
+
 func (user *User) TableName() string {
 	return "user"
 }
