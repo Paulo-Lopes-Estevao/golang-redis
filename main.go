@@ -139,12 +139,10 @@ func httpDeleteUser(c echo.Context) error {
 }
 
 func (users *User) UnmarshalBinary(data []byte) error {
-	fmt.Println("UnmarshalBinary")
 	return json.Unmarshal(data, users)
 }
 
 func (users *User) MarshalBinary() ([]byte, error) {
-	fmt.Println("MarshalBinary")
 	return json.Marshal(users)
 }
 
